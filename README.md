@@ -39,6 +39,12 @@ This module makes each level visually diferrent and also allows to filter by pas
 
 **Note:** When log level is set to ERROR, source info (filename and line number) are not added to each log. This is done to improve performance (usually ERROR level is set on production environments) and also because error logs are usually called with Error objects, which include the same information as part of their stacktrace.
 
+##Installation
+
+```javascript
+$ npm install econsole
+```
+
 ##Usage
 
 

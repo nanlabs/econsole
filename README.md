@@ -16,7 +16,7 @@ One of the keys of this components was to make it small and self-contained (no e
 ##Features
 
  - Logging filtering based on LEVEL
- - Different text styles for each level, making it easier to read and distinguish them
+ - Different text colors and styles for each level, making it easier to read and distinguish them
  - Source filename and line number for each log message!
  - Error parsing for Error level logs
  - New custom verbose/TRACE logging level added to go beyond DEBUG
@@ -65,7 +65,7 @@ For example, if level is WARN, only ERROR and WARN logs will be displayed, other
 
 Then use console's methods as usual and they will be enhanced.
 
-Here is an example of the new output:
+Here is an example of the new output text (the colors and styles will be different in the actual console):
 
 ```javascript
     <DEBUG> [sample.js:51] Testing LOG LEVEL
@@ -92,7 +92,7 @@ Also, error logging is improved to parse errors and show their stacktraces:
 	console.error('Some error message', new Error("the error"));
 ```
 
-The last function will output
+The last function will output the following text (again, the colors and styles will be different in the actual console)
 
 ```javascript
     <ERROR> [sample.js:42] Some error message

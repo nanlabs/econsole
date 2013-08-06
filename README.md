@@ -15,7 +15,6 @@ One of the keys of this components was to make it small and self-contained (no e
 
 ##Features
 
-
  - Logging filtering based on LEVEL
  - Different text styles for each level, making it easier to read and distinguish them
  - Source filename and line number for each log message!
@@ -37,6 +36,8 @@ The following logging levels are defined (in order):
 Node provides error, warn, info and log methods but the only difference between them is that error and warn log to stderr and log and info to stdout. Other than that, they look the same.
 
 This module makes each level visually diferrent and also allows to filter by passing a LEVEL to the enhance function.
+
+**Note:** When log level is set to ERROR, source info (filename and line number) are not added to each log. This is done to improve performance (usually ERROR level is set on production environments) and also because error logs are usually called with Error objects, which include the same information as part of their stacktrace.
 
 ##Usage
 

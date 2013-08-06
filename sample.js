@@ -5,22 +5,19 @@
  * If no level is passed, ALL is used.
  */
 
-// Dependency
-var econsole = require('./index')
-
 // Retrieve log level from command line parameter
 var logLevel = (process.argv.length>2)?process.argv[2]:'ALL';
 
 // First, show how regular console shows this
-console.log('\n\nRegular console\n');
-console.log('---------------');
+console.log('\n\nRegular console');
+console.log('---------------\n');
 writeLogs(false);
 
 // Enhance console and call the method again to show the difference
 console.log('\n\nEnhanced console with log level', logLevel);
-console.log('--------------------------------------');
+console.log('--------------------------------------\n');
 
-econsole.enhance(logLevel)
+require('./index').enhance(logLevel);
 writeLogs(true);
 
 /**

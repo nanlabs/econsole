@@ -1,0 +1,26 @@
+{
+  "name": "econsole",
+  "description": "Enhanced console",
+  "version": "0.1.0",
+  "tags": [
+    "log",
+    "logger",
+    "console",
+    "util",
+    "utility",
+    "trace"
+  ],
+  "dependencies": {},
+  "author": "Martin Moscovich <martin@nan-labs.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/nanlabs/econsole.git"
+  },
+  "bugs": {
+    "url": "http://github.com/nanlabs/econsole/issues"
+  },
+  "main": "index",
+  "scripts": {
+    "test": "node test.js"
+  }
+}

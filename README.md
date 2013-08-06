@@ -3,7 +3,7 @@ econsole
 
 Enhanced console for node.js
 
-Current version: v0.1.0
+Current version: v0.1.1
 
 One of the easiest and most common ways to debug and log a node.js app is to use *console.log()*
 

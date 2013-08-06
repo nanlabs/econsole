@@ -1,14 +1,23 @@
 {
   "name": "econsole",
   "description": "Enhanced console",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "tags": [
     "log",
     "logger",
+    "logging",
     "console",
+    "console.log",
+    "debug",
+    "debugging",
     "util",
     "utility",
-    "trace"
+    "trace",
+    "line",
+    "linenumber",
+    "color",
+    "colors",
+    "colorized"
   ],
   "dependencies": {},
   "author": "Martin Moscovich <martin@nan-labs.com>",

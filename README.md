@@ -13,7 +13,7 @@ For a recent node project, we created a "console enhancer" that gaves us some re
 
 One of the keys of this components was to make it small and self-contained (no external dependencies besides the ones provided by node).
 
-## Features
+##Features
 
 
  - Logging filtering based on LEVEL
@@ -21,8 +21,9 @@ One of the keys of this components was to make it small and self-contained (no e
  - Source filename and line number for each log message!
  - Error parsing for Error level logs
  - New custom verbose/TRACE logging level added to go beyond DEBUG
+ - All logs are sent to stderr for consistency (node sends some to stderr and some to stdout, making it harder to collect all in one place)
 
-## Logging levels
+##Logging levels
 
 
 The following logging levels are defined (in order):
@@ -33,38 +34,46 @@ The following logging levels are defined (in order):
  - DEBUG (console.log / console.debug)
  - TRACE (console.verbose)
 
-node provides error, warn, info and log methods but the only difference between them is that error and warn log to stderr and log and info to stdout. Other than that, they look the same.
+Node provides error, warn, info and log methods but the only difference between them is that error and warn log to stderr and log and info to stdout. Other than that, they look the same.
 
 This module makes each level visually diferrent and also allows to filter by passing a LEVEL to the enhance function.
 
-## Usage
+##Usage
 
 
 To enhance the console, add this line **ONCE** (eg. in the main module) to your code:
 
 require('econsole').enhance([_String_ logLevel = 'ALL'])
 
-If not present, the level will be *ALL* (alias for *TRACE*)
+If not present, the level will be *ALL* (alias for *TRACE*). This means all logs will be shown.
+
+For example, if level is WARN, only ERROR and WARN logs will be displayed, others will be ignored.
+
 
 **Example**
 
-    require('econsole').enhance('DEBUG');
+```javascript
+    require('econsole').enhance('TRACE');
+```
 
 Then use console's methods as usual and they will be enhanced.
 
 Here is an example of the new output:
 
+```javascript
     <DEBUG> [sample.js:51] Testing LOG LEVEL
+```
 
 **Differences in API**
 
 The enhanced console includes 2 new methods:
 
- - console.debug: alias for console.log
- - console.verbose: TRACE level (greater detail than DEBUG)
+ - **console.debug**: alias for console.log
+ - **console.verbose**: TRACE level (greater detail than DEBUG)
 
 Also, error logging is improved to parse errors and show their stacktraces:
 
+```javascript
     // Error level logging with a message but NO error
 	console.error('Some error message')
 	
@@ -74,9 +83,11 @@ Also, error logging is improved to parse errors and show their stacktraces:
 
 	// Error level logging with both message and error
 	console.error('Some error message', new Error("the error"));
+```
 
 The last function will output
 
+```javascript
     <ERROR> [sample.js:42] Some error message
     Error: the error
         at writeLogs (<path to script>/sample.js:42:53)
@@ -88,9 +99,9 @@ The last function will output
         at Function.Module.runMain (module.js:497:10)
         at startup (node.js:119:16)
         at node.js:901:3
+```
 
-
-## To Do
+##To Do
 
 
  - Configurable log message format
@@ -99,14 +110,14 @@ The last function will output
  - Unit testing
 
 
-## Thanks
+##Thanks
 
 We would like to thank the authors of some libraries this code was inspired by:
 
  - Esa-Matti Suuronen - clim (http://github.com/epeli/node-clim)
  - TJ Holowaychuk - callsite (http://github.com/visionmedia/callsite)
 
-## License
+##License
 The MIT License (MIT)
 
 Copyright (c) 2013 NaN Labs <martin@nan-labs.com>

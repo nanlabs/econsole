@@ -67,33 +67,31 @@ var currentLevel = levels.ALL;
  var showSourceInfo = true;
 
 /**
- * Path where the log files will be saved.
+ * Array of functions used to write the logs. 
+ * By default, only console logger is used
  */
- var currentFilePath = './logs';
+var appenders = [logToConsole];
 
 /**
- * Name of the log file.
+ * Path of the log file.
  */
- var currentFileName = 'server.log';
+ var currentFilePath = './logs/server.log';
+
+/**
+ * Reference to the original console.error in case of failure
+ */
+var originalConsoleError = global.console.error;
 
 /**
  * Function to call in order to improve node's console.
- * @param level the log level
+ * @param options configuration options
  */
 exports.enhance = function(options) {
 	
 	var level = options.level;
 
-	if (options.path) {
-		currentFilePath = options.path;
-	}
-
-	if (options.filename) {
-		currentFileName = options.filename;
-	}
-
-	fs.mkdirSync(currentFilePath);
-
+	if(options.file) initFileLogger(options.filepath);
+		
 	if(level === 'VERBOSE') level = 'TRACE';
 
 	var levelNumber = levels[level];
@@ -115,6 +113,18 @@ exports.enhance = function(options) {
 };
 
 /**
+ * Initialzes the file logger
+ * @param filepath path to the log file
+ */
+function initFileLogger(filepath) {
+	currentFilePath = filepath || currentFilePath;
+
+	var logDir = path.dirname(currentFilePath);
+	appenders.push(logToFile);
+	if(!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+};
+
+/**
  * Writes the log to stderr
  *
  * Partially based on clim (http://github.com/epeli/node-clim)
@@ -133,12 +143,25 @@ function writeLog(level, msg) {
 		line = util.format("<%s>\t%s", level, msg);
 	}
 	
-	var styledLine = logStyler.addCodes(line, levelStyles[level]);
-	process.stderr.write(styledLine + "\n");
-
-	var filename = path.join(currentFilePath, currentFileName);
-  fs.appendFileSync(filename, line + '\n');
+	line += '\n';
+	appenders.forEach(function(appender) {
+		appender(level, line);
+	});
 }
+
+function logToConsole(level, line) {
+	var styledLine = logStyler.addCodes(line, levelStyles[level]);
+	process.stderr.write(styledLine);
+};
+
+function logToFile(level, line) {
+	fs.appendFile(currentFilePath, line, function (err) {
+		if (err) {
+			originalConsoleError("Error logging to '" + currentFilePath + "':\n" + err);
+			throw err;
+		}
+	});
+};
 
 /**
  * Gets the source information from the line being log

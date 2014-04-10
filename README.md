@@ -3,13 +3,13 @@ econsole
 
 Enhanced console for node.js
 
-Current version: v0.1.1
+Current version: **v0.2.0**
 
 One of the easiest and most common ways to debug and log a node.js app is to use *console.log()*
 
 It works ok for simple apps, but when things get complicated, it's usually not enough.
 
-For a recent node project, we created a "console enhancer" that gaves us some really required features (see below).
+For a recent node project, we created a "console enhancer" that gave us some really required features (see below).
 
 One of the keys of this components was to make it small and self-contained (no external dependencies besides the ones provided by node).
 
@@ -21,6 +21,7 @@ One of the keys of this components was to make it small and self-contained (no e
  - Error parsing for Error level logs
  - New custom verbose/TRACE logging level added to go beyond DEBUG
  - All logs are sent to stderr for consistency (node sends some to stderr and some to stdout, making it harder to collect all in one place)
+ - Log to **File**
 
 ##Logging levels
 
@@ -50,20 +51,32 @@ $ npm install econsole
 
 To enhance the console, add this line **ONCE** (eg. in the main module) to your code:
 
-require('econsole').enhance([_String_ logLevel = 'ALL'])
-
-If not present, the level will be *ALL* (alias for *TRACE*). This means all logs will be shown.
-
-For example, if level is WARN, only ERROR and WARN logs will be displayed, others will be ignored.
-
-
-**Example**
-
 ```javascript
-    require('econsole').enhance('TRACE');
+require('econsole').enhance({options})
 ```
 
-Then use console's methods as usual and they will be enhanced.
+### Options
+Name | Type | Default | Description
+----|---|----|------
+**level** | ```string``` | ```ALL``` (aka ```TRACE```) | Minimum level to Log. <br>For example, if level is WARN, only ERROR and WARN logs will be displayed, others will be ignored.
+**file** | ```boolean``` | ```false``` | Flag that enables/disables logging to a file
+**filepath** | ```string``` | ```'./logs/server.log'``` | Path where the file should be logged
+
+**Examples**
+
+```javascript
+    // Logs ALL levels only to console
+    require('econsole').enhance({ level: 'TRACE'});
+
+    // Logs ERROR, WARN and INFO levels to console and the file './logs/server.log'
+    require('econsole').enhance({ level: 'INFO', file: true });
+    
+    // Logs ERROR level only to console and the file 'app.log' in the current directory
+    require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log'});
+
+```
+
+After calling ```enhance()```, use console's methods as usual and they will be enhanced.
 
 Here is an example of the new output text (the colors and styles will be different in the actual console):
 
@@ -82,14 +95,14 @@ Also, error logging is improved to parse errors and show their stacktraces:
 
 ```javascript
     // Error level logging with a message but NO error
-	console.error('Some error message')
-	
-	// Error level logging with an error but no message
-	// This shows enhanced error parsing in logging 
-	console.error(new Error("the error"));
+    console.error('Some error message')
+    
+    // Error level logging with an error but no message
+    // This shows enhanced error parsing in logging 
+    console.error(new Error("the error"));
 
-	// Error level logging with both message and error
-	console.error('Some error message', new Error("the error"));
+    // Error level logging with both message and error
+    console.error('Some error message', new Error("the error"));
 ```
 
 The last function will output the following text (again, the colors and styles will be different in the actual console)
@@ -108,12 +121,16 @@ The last function will output the following text (again, the colors and styles w
         at node.js:901:3
 ```
 
+## What's new
+
+#### 0.2.0
+ - Log to file, including the appropriate configuration settings
+
 ##To Do
 
 
  - Configurable log message format
  - Configurable styles
- - Log to file
  - Unit testing
 
 

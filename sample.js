@@ -17,7 +17,7 @@ writeLogs(false);
 console.log('\n\nEnhanced console with log level', logLevel);
 console.log('--------------------------------------\n');
 
-require('./index').enhance(logLevel);
+require('./index').enhance({ level: logLevel });
 writeLogs(true);
 
 /**

@@ -6,7 +6,8 @@
  * Copyright (c) 2013 NaN Labs (www.nan-labs.com)
  */
 
-
+var fs = require('fs');
+var path = require('path');
 var util = require("util");
 
 /**
@@ -66,10 +67,33 @@ var currentLevel = levels.ALL;
  var showSourceInfo = true;
 
 /**
+ * Path where the log files will be saved.
+ */
+ var currentFilePath = './logs';
+
+/**
+ * Name of the log file.
+ */
+ var currentFileName = 'server.log';
+
+/**
  * Function to call in order to improve node's console.
  * @param level the log level
  */
-exports.enhance = function(level) {
+exports.enhance = function(options) {
+	
+	var level = options.level;
+
+	if (options.path) {
+		currentFilePath = options.path;
+	}
+
+	if (options.filename) {
+		currentFileName = options.filename;
+	}
+
+	fs.mkdirSync(currentFilePath);
+
 	if(level === 'VERBOSE') level = 'TRACE';
 
 	var levelNumber = levels[level];
@@ -109,8 +133,11 @@ function writeLog(level, msg) {
 		line = util.format("<%s>\t%s", level, msg);
 	}
 	
-	line = logStyler.addCodes(line, levelStyles[level]);
-	process.stderr.write(line + "\n");
+	var styledLine = logStyler.addCodes(line, levelStyles[level]);
+	process.stderr.write(styledLine + "\n");
+
+	var filename = path.join(currentFilePath, currentFileName);
+  fs.appendFileSync(filename, line + '\n');
 }
 
 /**

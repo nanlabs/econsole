@@ -61,6 +61,7 @@ Name | Type | Default | Description
 **level** | ```string``` | ```ALL``` (aka ```TRACE```) | Minimum level to Log. <br>For example, if level is WARN, only ERROR and WARN logs will be displayed, others will be ignored.
 **file** | ```boolean``` | ```false``` | Flag that enables/disables logging to a file
 **filepath** | ```string``` | ```'./logs/server.log'``` | Path where the file should be logged
+**includeDate** | ```boolean``` | ```false``` | Flag that indicates if the timestamp should be shown in the log
 
 **Examples**
 
@@ -73,6 +74,9 @@ Name | Type | Default | Description
     
     // Logs ERROR level only to console and the file 'app.log' in the current directory
     require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log'});
+
+    // Logs ERROR level only to console and the file 'app.log' in the current directory, showing the log timestamp
+    require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log', includeDate: true });
 
 ```
 

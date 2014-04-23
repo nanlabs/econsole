@@ -10,6 +10,8 @@ var fs = require('fs');
 var path = require('path');
 var util = require("util");
 
+var moment = require('moment');
+
 /**
  * ERROR LEVELS. 
  * Higher Levels include the lower levels.
@@ -83,6 +85,11 @@ var appenders = [logToConsole];
 var originalConsoleError = global.console.error;
 
 /**
+ * Flag that indicates if the timestamp should be shown in the log.
+ */
+var includeDate = false;
+
+/**
  * Function to call in order to improve node's console.
  * @param options configuration options
  */
@@ -93,6 +100,8 @@ exports.enhance = function(options) {
 	if(options.file) initFileLogger(options.filepath);
 		
 	if(level === 'VERBOSE') level = 'TRACE';
+
+	if (options.includeDate) includeDate = options.includeDate;
 
 	var levelNumber = levels[level];
 	if (typeof levelNumber !== 'undefined') currentLevel = levelNumber;
@@ -134,13 +143,17 @@ function writeLog(level, msg) {
 	var line;
 	if(showSourceInfo) {
 		var si = getSourceInfo();
-		//if(si.methodName === 'anonymous') {
-		line = util.format("<%s>\t[%s:%s] %s", level, si.file, si.lineNumber, msg);
-		//} else {
-		//	line = util.format("<%s>\t[%s:%s - %s()] %s", level, si.file, si.lineNumber, si.methodName, msg);
-		//}
+		if (includeDate) {
+			line = util.format("[%s] <%s>\t[%s:%s] %s", moment().format(), level, si.file, si.lineNumber, msg);
+		} else {
+			line = util.format("<%s>\t[%s:%s] %s", level, si.file, si.lineNumber, msg);
+		}
 	} else {
-		line = util.format("<%s>\t%s", level, msg);
+		if (includeDate) {
+			line = util.format("[%s] <%s>\t%s", moment().format(), level, msg);
+		} else {
+			line = util.format("<%s>\t%s", level, msg);
+		}
 	}
 	
 	line += '\n';

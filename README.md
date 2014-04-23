@@ -130,6 +130,9 @@ The last function will output the following text (again, the colors and styles w
 #### 0.2.0
  - Log to file, including the appropriate configuration settings
 
+#### 0.3.0
+ - Timestamp added to logs, as an optional feature
+
 ##To Do
 
 

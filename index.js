@@ -13,7 +13,7 @@ var util = require("util");
 var moment = require('moment');
 
 /**
- * ERROR LEVELS. 
+ * ERROR LEVELS.
  * Higher Levels include the lower levels.
  */
 var levels = {
@@ -63,13 +63,13 @@ var currentLevel = levels.ALL;
 
 /**
  * Flag indicating whether to show the file name and line on each log.
- * Currently, it is always true except when level is ERROR 
+ * Currently, it is always true except when level is ERROR
  * (to improve performance and because the error's stack contains the line number)
  */
  var showSourceInfo = true;
 
 /**
- * Array of functions used to write the logs. 
+ * Array of functions used to write the logs.
  * By default, only console logger is used
  */
 var appenders = [logToConsole];
@@ -89,24 +89,32 @@ var originalConsoleError = global.console.error;
  */
 var includeDate = false;
 
+
+/**
+ * Substring the should be replaced in the file paths
+ */
+var pathReplace;
+
 /**
  * Function to call in order to improve node's console.
  * @param options configuration options
  */
 exports.enhance = function(options) {
-	
+
 	var level = options.level;
 
 	if(options.file) initFileLogger(options.filepath);
-		
+
 	if(level === 'VERBOSE') level = 'TRACE';
 
 	if (options.includeDate) includeDate = options.includeDate;
 
 	var levelNumber = levels[level];
 	if (typeof levelNumber !== 'undefined') currentLevel = levelNumber;
-	
+
 	showSourceInfo = (currentLevel !== 0);
+
+	pathReplace = options.pathReplace || '';
 
 	global.console.info = LogBuilder.createLogger("INFO");
 
@@ -155,7 +163,7 @@ function writeLog(level, msg) {
 			line = util.format("<%s>\t%s", level, msg);
 		}
 	}
-	
+
 	line += '\n';
 	appenders.forEach(function(appender) {
 		appender(level, line);
@@ -187,7 +195,7 @@ function getSourceInfo() {
 
 	return {
 		methodName: exec.getFunctionName() || 'anonymous',
-		file: exec.getFileName().substring(pos + 1),
+		file: exec.getFileName().substring(pos + 1).replace(pathReplace, ''),
 		lineNumber: exec.getLineNumber()
 	};
 }
@@ -234,7 +242,7 @@ var LogBuilder = {
 			if(levels[level] <= currentLevel) {
 
 		  		if(arguments[0] instanceof Error) {
-		  			arguments[0] = arguments[0].stack; 
+		  			arguments[0] = arguments[0].stack;
 		  		} else if(arguments[1] instanceof Error) {
 		  			arguments = [arguments[0] + ":\n" + arguments[1].stack];
 				}

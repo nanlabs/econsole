@@ -62,6 +62,7 @@ Name | Type | Default | Description
 **file** | ```boolean``` | ```false``` | Flag that enables/disables logging to a file
 **filepath** | ```string``` | ```'./logs/server.log'``` | Path where the file should be logged
 **includeDate** | ```boolean``` | ```false``` | Flag that indicates if the timestamp should be shown in the log
+**replacePath** | ```string``` | ```''``` | Substring that should be replaced in the file paths.
 
 **Examples**
 

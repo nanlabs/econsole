@@ -106,7 +106,7 @@ exports.enhance = function(options) {
 	var levelNumber = levels[level];
 	if (typeof levelNumber !== 'undefined') currentLevel = levelNumber;
 	
-	showSourceInfo = (currentLevel !== 0);
+	showSourceInfo = (options.showSourceInfo !== undefined) ? options.showSourceInfo : (currentLevel !== 0);
 
 	global.console.info = LogBuilder.createLogger("INFO");
 

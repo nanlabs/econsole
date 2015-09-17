@@ -3,7 +3,7 @@ econsole
 
 Enhanced console for node.js
 
-Current version: **v0.3.0**
+Current version: **v0.4.0**
 
 One of the easiest and most common ways to debug and log a node.js app is to use *console.log()*
 
@@ -137,6 +137,9 @@ The last function will output the following text (again, the colors and styles w
 #### 0.3.0
  - Timestamp added to logs, as an optional feature
 
+#### 0.4.0
+ - showSourceInfo flag added to optionally show the file path (Thanks @paulrutter for the enhancement!).
+
 ##To Do
 
 
@@ -155,7 +158,7 @@ We would like to thank the authors of some libraries this code was inspired by:
 ##License
 The MIT License (MIT)
 
-Copyright (c) 2013 NaN Labs &lt;martin@nan-labs.com&gt;
+Copyright (c) 2013 NaN Labs &lt;contact@nan-labs.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

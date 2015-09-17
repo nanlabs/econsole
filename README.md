@@ -62,6 +62,7 @@ Name | Type | Default | Description
 **file** | ```boolean``` | ```false``` | Flag that enables/disables logging to a file
 **filepath** | ```string``` | ```'./logs/server.log'``` | Path where the file should be logged
 **includeDate** | ```boolean``` | ```false``` | Flag that indicates if the timestamp should be shown in the log
+**showSourceInfo** | ```boolean``` | ```true``` | Flag that indicates if loglines and stack for each line. If not specified, defaults to true only when level is set to ERROR.
 
 **Examples**
 
@@ -76,7 +77,10 @@ Name | Type | Default | Description
     require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log'});
 
     // Logs ERROR level only to console and the file 'app.log' in the current directory, showing the log timestamp
-    require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log', includeDate: true });
+    require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log', includeDate: true});
+    
+    // Logs ERROR, WARN and INFO level only to console and the file 'app.log' in the current directory, showing the log timestamp and no source info (log lines and stack)
+    require('econsole').enhance({ level: 'INFO', file: true,  filepath: './app.log', includeDate: true, showSourceInfo: false});
 
 ```
 

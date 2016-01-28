@@ -13,47 +13,47 @@ var util = require("util");
 var moment = require('moment');
 
 /**
- * ERROR LEVELS.
+ * ERROR LEVELS. 
  * Higher Levels include the lower levels.
  */
 var levels = {
-  ERROR: 0,
-  WARN: 1,
-  INFO: 2,
-  DEBUG: 3,
-  TRACE: 4,
-  ALL: 5
+	ERROR: 0,
+	WARN: 1,
+	INFO: 2,
+	DEBUG: 3,
+	TRACE: 4,
+	ALL: 5
 };
 
 /**
  * Font styles
  */
 var styles = {
-  CLEAR: 0,
-  BOLD: 1,
-  ITALIC: 3,
-  UNDERLINE: 4
+	CLEAR: 0,
+	BOLD: 1,
+	ITALIC: 3,
+	UNDERLINE: 4
 };
 
 /**
  * Font colors
  */
 var colors = {
-  RED: 31,
-  YELLOW: 33,
-  WHITE: 37,
-  BLACK: 30
+	RED: 31,
+	YELLOW: 33,
+	WHITE: 37,
+	BLACK: 30
 };
 
 /**
  * Definitions of styles and colors for each level
  */
 var levelStyles = {
-  ERROR: [styles.BOLD, colors.RED],
-  WARN: [styles.BOLD, colors.YELLOW],
-  INFO: [styles.BOLD, colors.WHITE],
-  DEBUG: [colors.WHITE],
-  TRACE: [styles.BOLD, colors.BLACK]
+	ERROR: [styles.BOLD, colors.RED],
+	WARN: [styles.BOLD, colors.YELLOW],
+	INFO: [styles.BOLD, colors.WHITE],
+	DEBUG: [colors.WHITE],
+	TRACE: [styles.BOLD, colors.BLACK]
 };
 
 /**
@@ -62,19 +62,14 @@ var levelStyles = {
 var currentLevel = levels.ALL;
 
 /**
- * Flag that decides if colors/styling is used in the output
- */
- var useStyling = true;
-
-/**
  * Flag indicating whether to show the file name and line on each log.
- * Currently, it is always true except when level is ERROR
+ * Currently, it is always true except when level is ERROR 
  * (to improve performance and because the error's stack contains the line number)
  */
  var showSourceInfo = true;
 
 /**
- * Array of functions used to write the logs.
+ * Array of functions used to write the logs. 
  * By default, only console logger is used
  */
 var appenders = [logToConsole];
@@ -99,32 +94,31 @@ var includeDate = false;
  * @param options configuration options
  */
 exports.enhance = function(options) {
+	
+	var level = options.level;
 
-  var level = options.level;
+	if(options.file) initFileLogger(options.filepath);
+		
+	if(level === 'VERBOSE') level = 'TRACE';
 
-  if(options.file) initFileLogger(options.filepath);
+	if (options.includeDate) includeDate = options.includeDate;
 
-  if(level === 'VERBOSE') level = 'TRACE';
+	var levelNumber = levels[level];
+	if (typeof levelNumber !== 'undefined') currentLevel = levelNumber;
+	
+	showSourceInfo = (options.showSourceInfo !== undefined) ? options.showSourceInfo : (currentLevel !== 0);
 
-  if (options.includeDate) includeDate = options.includeDate;
+	global.console.info = LogBuilder.createLogger("INFO");
 
-  var levelNumber = levels[level];
-  if (typeof levelNumber !== 'undefined') currentLevel = levelNumber;
+	global.console.warn = LogBuilder.createLogger("WARN");
 
-  showSourceInfo = (options.showSourceInfo !== undefined) ? options.showSourceInfo : (currentLevel !== 0);
-  useStyling = (options.useStyling !== undefined) ? options.useStyling === true : true;
+	global.console.debug = LogBuilder.createLogger("DEBUG");
 
-  global.console.info = LogBuilder.createLogger("INFO");
+	global.console.verbose = LogBuilder.createLogger("TRACE");
 
-  global.console.warn = LogBuilder.createLogger("WARN");
+	global.console.error = LogBuilder.createErrorLogger();
 
-  global.console.debug = LogBuilder.createLogger("DEBUG");
-
-  global.console.verbose = LogBuilder.createLogger("TRACE");
-
-  global.console.error = LogBuilder.createErrorLogger();
-
-  global.console.log = global.console.debug;
+	global.console.log = global.console.debug;
 };
 
 /**
@@ -132,11 +126,11 @@ exports.enhance = function(options) {
  * @param filepath path to the log file
  */
 function initFileLogger(filepath) {
-  currentFilePath = filepath || currentFilePath;
+	currentFilePath = filepath || currentFilePath;
 
-  var logDir = path.dirname(currentFilePath);
-  appenders.push(logToFile);
-  if(!fs.existsSync(logDir)) fs.mkdirSync(logDir);
+	var logDir = path.dirname(currentFilePath);
+	appenders.push(logToFile);
+	if(!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 };
 
 /**
@@ -146,58 +140,56 @@ function initFileLogger(filepath) {
  * Copyright (c) 2009-2011 Esa-Matti Suuronen <esa-matti@suuronen.org>
  */
 function writeLog(level, msg) {
-  var line;
-  if(showSourceInfo) {
-    var si = getSourceInfo();
-    if (includeDate) {
-      line = util.format("[%s] <%s>\t[%s:%s] %s", moment().format(), level, si.file, si.lineNumber, msg);
-    } else {
-      line = util.format("<%s>\t[%s:%s] %s", level, si.file, si.lineNumber, msg);
-    }
-  } else {
-    if (includeDate) {
-      line = util.format("[%s] <%s>\t%s", moment().format(), level, msg);
-    } else {
-      line = util.format("<%s>\t%s", level, msg);
-    }
-  }
-
-  line += '\n';
-  appenders.forEach(function(appender) {
-    appender(level, line);
-  });
+	var line;
+	if(showSourceInfo) {
+		var si = getSourceInfo();
+		if (includeDate) {
+			line = util.format("[%s] <%s>\t[%s:%s] %s", moment().format(), level, si.file, si.lineNumber, msg);
+		} else {
+			line = util.format("<%s>\t[%s:%s] %s", level, si.file, si.lineNumber, msg);
+		}
+	} else {
+		if (includeDate) {
+			line = util.format("[%s] <%s>\t%s", moment().format(), level, msg);
+		} else {
+			line = util.format("<%s>\t%s", level, msg);
+		}
+	}
+	
+	line += '\n';
+	appenders.forEach(function(appender) {
+		appender(level, line);
+	});
 }
 
 function logToConsole(level, line) {
-  if (useStyling){
-    line = logStyler.addCodes(line, levelStyles[level]);
-  }
-  process.stderr.write(line);
+	var styledLine = logStyler.addCodes(line, levelStyles[level]);
+	process.stderr.write(styledLine);
 };
 
 function logToFile(level, line) {
-  fs.appendFile(currentFilePath, line, function (err) {
-    if (err) {
-      originalConsoleError("Error logging to '" + currentFilePath + "':\n" + err);
-      throw err;
-    }
-  });
+	fs.appendFile(currentFilePath, line, function (err) {
+		if (err) {
+			originalConsoleError("Error logging to '" + currentFilePath + "':\n" + err);
+			throw err;
+		}
+	});
 };
 
 /**
  * Gets the source information from the line being log
  */
 function getSourceInfo() {
-  var exec = getStack()[3];
+	var exec = getStack()[3];
 
-  var pos = exec.getFileName().lastIndexOf('\\');
-  if(pos < 0) exec.getFileName().lastIndexOf('/');
+	var pos = exec.getFileName().lastIndexOf('\\');
+	if(pos < 0) exec.getFileName().lastIndexOf('/');
 
-  return {
-    methodName: exec.getFunctionName() || 'anonymous',
-    file: exec.getFileName().substring(pos + 1),
-    lineNumber: exec.getLineNumber()
-  };
+	return {
+		methodName: exec.getFunctionName() || 'anonymous',
+		file: exec.getFileName().substring(pos + 1),
+		lineNumber: exec.getLineNumber()
+	};
 }
 
 
@@ -208,18 +200,18 @@ function getSourceInfo() {
  * Copyright (c) 2011, 2013 TJ Holowaychuk <tj@vision-media.ca>
  */
 function getStack() {
-  var old = Error.stackTraceLimit;
-  Error.stackTraceLimit = 4;
-  var orig = Error.prepareStackTrace;
-    Error.prepareStackTrace = function(_, stack){ return stack; };
-    var err = new Error;
-    Error.captureStackTrace(err, arguments.callee);
-    var stack = err.stack;
-    Error.prepareStackTrace = orig;
+	var old = Error.stackTraceLimit;
+	Error.stackTraceLimit = 4;
+	var orig = Error.prepareStackTrace;
+  	Error.prepareStackTrace = function(_, stack){ return stack; };
+  	var err = new Error;
+  	Error.captureStackTrace(err, arguments.callee);
+  	var stack = err.stack;
+  	Error.prepareStackTrace = orig;
 
-  Error.stackTraceLimit = old;
+	Error.stackTraceLimit = old;
 
-    return stack;
+  	return stack;
 }
 
 
@@ -227,49 +219,49 @@ function getStack() {
  * Creates the loggers
  */
 var LogBuilder = {
-  createLogger: function(level) {
-    return function () {
-      if(levels[level] <= currentLevel) {
-        var msg = util.format.apply(this, arguments);
-        writeLog(level, msg);
-      }
-    };
-  },
+	createLogger: function(level) {
+	  return function () {
+	  	if(levels[level] <= currentLevel) {
+		  	var msg = util.format.apply(this, arguments);
+		  	writeLog(level, msg);
+	  	}
+	  };
+	},
 
-  createErrorLogger: function() {
-    var level = "ERROR";
-    return function () {
-      if(levels[level] <= currentLevel) {
+	createErrorLogger: function() {
+		var level = "ERROR";
+		return function () {
+			if(levels[level] <= currentLevel) {
 
-          if(arguments[0] instanceof Error) {
-            arguments[0] = arguments[0].stack;
-          } else if(arguments[1] instanceof Error) {
-            arguments = [arguments[0] + ":\n" + arguments[1].stack];
-        }
+		  		if(arguments[0] instanceof Error) {
+		  			arguments[0] = arguments[0].stack; 
+		  		} else if(arguments[1] instanceof Error) {
+		  			arguments = [arguments[0] + ":\n" + arguments[1].stack];
+				}
 
-          var msg = util.format.apply(this, arguments);
-          writeLog(level, msg);
-        }
-    };
-  }
+			  	var msg = util.format.apply(this, arguments);
+			  	writeLog(level, msg);
+		  	}
+		};
+	}
 }
 
 /**
  * Adds the styles to the console logs
  */
 var logStyler = {
-  getAnsi: function(style) {
-    return '\u001b['+style+'m';
-  },
+	getAnsi: function(style) {
+		return '\u001b['+style+'m';
+	},
 
-  addCodes: function(msg, codes) {
-    codes.forEach(function(c) {
-      msg = logStyler.getAnsi(c) + msg;
-    });
+	addCodes: function(msg, codes) {
+		codes.forEach(function(c) {
+			msg = logStyler.getAnsi(c) + msg;
+		});
 
-    msg = msg + logStyler.getAnsi(styles.CLEAR);
+		msg = msg + logStyler.getAnsi(styles.CLEAR);
 
-    return msg;
-  }
+		return msg;
+	}
 }
 

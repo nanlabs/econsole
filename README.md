@@ -3,7 +3,7 @@ econsole
 
 Enhanced console for node.js
 
-Current version: **v0.5.0**
+Current version: **v0.4.0**
 
 One of the easiest and most common ways to debug and log a node.js app is to use *console.log()*
 
@@ -63,7 +63,6 @@ Name | Type | Default | Description
 **filepath** | ```string``` | ```'./logs/server.log'``` | Path where the file should be logged
 **includeDate** | ```boolean``` | ```false``` | Flag that indicates if the timestamp should be shown in the log
 **showSourceInfo** | ```boolean``` | ```true``` | Flag that indicates if loglines and stack for each line. If not specified, defaults to true only when level is set to ERROR.
-**useStyling** | ```boolean``` | ```true``` | Flag that indicates styling is used for log lines (colors), defaults to true
 
 **Examples**
 
@@ -73,18 +72,15 @@ Name | Type | Default | Description
 
     // Logs ERROR, WARN and INFO levels to console and the file './logs/server.log'
     require('econsole').enhance({ level: 'INFO', file: true });
-
+    
     // Logs ERROR level only to console and the file 'app.log' in the current directory
     require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log'});
 
     // Logs ERROR level only to console and the file 'app.log' in the current directory, showing the log timestamp
     require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log', includeDate: true});
-
+    
     // Logs ERROR, WARN and INFO level only to console and the file 'app.log' in the current directory, showing the log timestamp and no source info (log lines and stack)
     require('econsole').enhance({ level: 'INFO', file: true,  filepath: './app.log', includeDate: true, showSourceInfo: false});
-
-    // Logs ERROR, WARN and INFO level only to console and the file 'app.log' in the current directory, showing the log timestamp, no source info and no styling
-    require('econsole').enhance({ level: 'INFO', file: true,  filepath: './app.log', includeDate: true, showSourceInfo: false, useStyling: false});
 
 ```
 
@@ -108,9 +104,9 @@ Also, error logging is improved to parse errors and show their stacktraces:
 ```javascript
     // Error level logging with a message but NO error
     console.error('Some error message')
-
+    
     // Error level logging with an error but no message
-    // This shows enhanced error parsing in logging
+    // This shows enhanced error parsing in logging 
     console.error(new Error("the error"));
 
     // Error level logging with both message and error
@@ -143,9 +139,6 @@ The last function will output the following text (again, the colors and styles w
 
 #### 0.4.0
  - showSourceInfo flag added to optionally show the file path (Thanks @paulrutter for the enhancement!).
-
-#### 0.5.0
- - useStyling flag added to toggle styling in the log output.
 
 ##To Do
 

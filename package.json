@@ -1,7 +1,7 @@
 {
   "name": "econsole",
   "description": "Enhanced console",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "tags": [
     "log",
     "logger",
@@ -20,7 +20,7 @@
     "colorized"
   ],
   "dependencies": {
-    "moment": "2.6.0"
+    "moment": "2.18.1"
   },
   "author": "Martin Moscovich <martin@nan-labs.com>",
   "repository": {

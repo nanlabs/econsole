@@ -3,7 +3,7 @@ econsole
 
 Enhanced console for node.js
 
-Current version: **v0.5.0**
+Current version: **v0.5.1**
 
 One of the easiest and most common ways to debug and log a node.js app is to use *console.log()*
 
@@ -136,16 +136,19 @@ The last function will output the following text (again, the colors and styles w
 ## What's new
 
 #### 0.2.0
- - Log to file, including the appropriate configuration settings
+ - Log to file, including the appropriate configuration settings.
 
 #### 0.3.0
- - Timestamp added to logs, as an optional feature
+ - Timestamp added to logs, as an optional feature.
 
 #### 0.4.0
  - showSourceInfo flag added to optionally show the file path (Thanks @paulrutter for the enhancement!).
 
 #### 0.5.0
  - useStyling flag added to toggle styling in the log output.
+
+#### 0.5.1
+ - Upgrade momentjs library version due to https://nodesecurity.io/advisories/55 (Thanks @paulrutter).
 
 ##To Do
 

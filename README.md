@@ -150,6 +150,9 @@ The last function will output the following text (again, the colors and styles w
 #### 0.5.1
  - Upgrade momentjs library version due to https://nodesecurity.io/advisories/55 (Thanks @paulrutter).
 
+#### 0.5.3
+ - Upgrade momentjs library version due to https://github.com/advisories/GHSA-8hfj-j24r-96c4 (Thanks @paulrutter).
+
 ##To Do
 
 

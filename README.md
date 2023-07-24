@@ -1,11 +1,10 @@
-econsole
-========
+# econsole
 
 Enhanced console for node.js
 
-Current version: **v0.5.2**
+Current version: **v0.5.4**
 
-One of the easiest and most common ways to debug and log a node.js app is to use *console.log()*
+One of the easiest and most common ways to debug and log a node.js app is to use _console.log()_
 
 It works ok for simple apps, but when things get complicated, it's usually not enough.
 
@@ -15,24 +14,23 @@ One of the keys of this components was to make it small and self-contained (no e
 
 ##Features
 
- - Logging filtering based on LEVEL
- - Different text colors and styles for each level, making it easier to read and distinguish them
- - Source filename and line number for each log message!
- - Error parsing for Error level logs
- - New custom verbose/TRACE logging level added to go beyond DEBUG
- - All logs are sent to stderr for consistency (node sends some to stderr and some to stdout, making it harder to collect all in one place)
- - Log to **File**
+- Logging filtering based on LEVEL
+- Different text colors and styles for each level, making it easier to read and distinguish them
+- Source filename and line number for each log message!
+- Error parsing for Error level logs
+- New custom verbose/TRACE logging level added to go beyond DEBUG
+- All logs are sent to stderr for consistency (node sends some to stderr and some to stdout, making it harder to collect all in one place)
+- Log to **File**
 
 ##Logging levels
 
-
 The following logging levels are defined (in order):
 
- - ERROR(console.error)
- - WARN (console.warn)
- - INFO (console.info)
- - DEBUG (console.log / console.debug)
- - TRACE (console.verbose)
+- ERROR(console.error)
+- WARN (console.warn)
+- INFO (console.info)
+- DEBUG (console.log / console.debug)
+- TRACE (console.verbose)
 
 Node provides error, warn, info and log methods but the only difference between them is that error and warn log to stderr and log and info to stdout. Other than that, they look the same.
 
@@ -48,47 +46,68 @@ $ npm install econsole
 
 ##Usage
 
-
 To enhance the console, add this line **ONCE** (eg. in the main module) to your code:
 
 ```javascript
-require('econsole').enhance({options})
+require("econsole").enhance({ options });
 ```
 
 ### Options
-Name | Type | Default | Description
-----|---|----|------
-**level** | ```string``` | ```ALL``` (aka ```TRACE```) | Minimum level to Log. <br>For example, if level is WARN, only ERROR and WARN logs will be displayed, others will be ignored.
-**file** | ```boolean``` | ```false``` | Flag that enables/disables logging to a file
-**filepath** | ```string``` | ```'./logs/server.log'``` | Path where the file should be logged
-**includeDate** | ```boolean``` | ```false``` | Flag that indicates if the timestamp should be shown in the log
-**showSourceInfo** | ```boolean``` | ```true``` | Flag that indicates if loglines and stack for each line. If not specified, defaults to true only when level is set to ERROR.
-**useStyling** | ```boolean``` | ```true``` | Flag that indicates styling is used for log lines (colors), defaults to true
+
+| Name               | Type      | Default               | Description                                                                                                                  |
+| ------------------ | --------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **level**          | `string`  | `ALL` (aka `TRACE`)   | Minimum level to Log. <br>For example, if level is WARN, only ERROR and WARN logs will be displayed, others will be ignored. |
+| **file**           | `boolean` | `false`               | Flag that enables/disables logging to a file                                                                                 |
+| **filepath**       | `string`  | `'./logs/server.log'` | Path where the file should be logged                                                                                         |
+| **includeDate**    | `boolean` | `false`               | Flag that indicates if the timestamp should be shown in the log                                                              |
+| **showSourceInfo** | `boolean` | `true`                | Flag that indicates if loglines and stack for each line. If not specified, defaults to true only when level is set to ERROR. |
+| **useStyling**     | `boolean` | `true`                | Flag that indicates styling is used for log lines (colors), defaults to true                                                 |
 
 **Examples**
 
 ```javascript
-    // Logs ALL levels only to console
-    require('econsole').enhance({ level: 'TRACE'});
+// Logs ALL levels only to console
+require("econsole").enhance({ level: "TRACE" });
 
-    // Logs ERROR, WARN and INFO levels to console and the file './logs/server.log'
-    require('econsole').enhance({ level: 'INFO', file: true });
+// Logs ERROR, WARN and INFO levels to console and the file './logs/server.log'
+require("econsole").enhance({ level: "INFO", file: true });
 
-    // Logs ERROR level only to console and the file 'app.log' in the current directory
-    require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log'});
+// Logs ERROR level only to console and the file 'app.log' in the current directory
+require("econsole").enhance({
+  level: "ERROR",
+  file: true,
+  filepath: "./app.log",
+});
 
-    // Logs ERROR level only to console and the file 'app.log' in the current directory, showing the log timestamp
-    require('econsole').enhance({ level: 'ERROR', file: true,  filepath: './app.log', includeDate: true});
+// Logs ERROR level only to console and the file 'app.log' in the current directory, showing the log timestamp
+require("econsole").enhance({
+  level: "ERROR",
+  file: true,
+  filepath: "./app.log",
+  includeDate: true,
+});
 
-    // Logs ERROR, WARN and INFO level only to console and the file 'app.log' in the current directory, showing the log timestamp and no source info (log lines and stack)
-    require('econsole').enhance({ level: 'INFO', file: true,  filepath: './app.log', includeDate: true, showSourceInfo: false});
+// Logs ERROR, WARN and INFO level only to console and the file 'app.log' in the current directory, showing the log timestamp and no source info (log lines and stack)
+require("econsole").enhance({
+  level: "INFO",
+  file: true,
+  filepath: "./app.log",
+  includeDate: true,
+  showSourceInfo: false,
+});
 
-    // Logs ERROR, WARN and INFO level only to console and the file 'app.log' in the current directory, showing the log timestamp, no source info and no styling
-    require('econsole').enhance({ level: 'INFO', file: true,  filepath: './app.log', includeDate: true, showSourceInfo: false, useStyling: false});
-
+// Logs ERROR, WARN and INFO level only to console and the file 'app.log' in the current directory, showing the log timestamp, no source info and no styling
+require("econsole").enhance({
+  level: "INFO",
+  file: true,
+  filepath: "./app.log",
+  includeDate: true,
+  showSourceInfo: false,
+  useStyling: false,
+});
 ```
 
-After calling ```enhance()```, use console's methods as usual and they will be enhanced.
+After calling `enhance()`, use console's methods as usual and they will be enhanced.
 
 Here is an example of the new output text (the colors and styles will be different in the actual console):
 
@@ -100,21 +119,21 @@ Here is an example of the new output text (the colors and styles will be differe
 
 The enhanced console includes 2 new methods:
 
- - **console.debug**: alias for console.log
- - **console.verbose**: TRACE level (greater detail than DEBUG)
+- **console.debug**: alias for console.log
+- **console.verbose**: TRACE level (greater detail than DEBUG)
 
 Also, error logging is improved to parse errors and show their stacktraces:
 
 ```javascript
-    // Error level logging with a message but NO error
-    console.error('Some error message')
+// Error level logging with a message but NO error
+console.error("Some error message");
 
-    // Error level logging with an error but no message
-    // This shows enhanced error parsing in logging
-    console.error(new Error("the error"));
+// Error level logging with an error but no message
+// This shows enhanced error parsing in logging
+console.error(new Error("the error"));
 
-    // Error level logging with both message and error
-    console.error('Some error message', new Error("the error"));
+// Error level logging with both message and error
+console.error("Some error message", new Error("the error"));
 ```
 
 The last function will output the following text (again, the colors and styles will be different in the actual console)
@@ -136,37 +155,41 @@ The last function will output the following text (again, the colors and styles w
 ## What's new
 
 #### 0.2.0
- - Log to file, including the appropriate configuration settings.
+
+- Log to file, including the appropriate configuration settings.
 
 #### 0.3.0
- - Timestamp added to logs, as an optional feature.
+
+- Timestamp added to logs, as an optional feature.
 
 #### 0.4.0
- - showSourceInfo flag added to optionally show the file path (Thanks @paulrutter for the enhancement!).
+
+- showSourceInfo flag added to optionally show the file path (Thanks @paulrutter for the enhancement!).
 
 #### 0.5.0
- - useStyling flag added to toggle styling in the log output.
+
+- useStyling flag added to toggle styling in the log output.
 
 #### 0.5.1
- - Upgrade momentjs library version due to https://nodesecurity.io/advisories/55 (Thanks @paulrutter).
+
+- Upgrade momentjs library version due to https://nodesecurity.io/advisories/55 (Thanks @paulrutter).
 
 #### 0.5.3
- - Upgrade momentjs library version due to https://github.com/advisories/GHSA-8hfj-j24r-96c4 (Thanks @paulrutter).
+
+- Upgrade momentjs library version due to https://github.com/advisories/GHSA-8hfj-j24r-96c4 (Thanks @paulrutter).
 
 ##To Do
 
-
- - Configurable log message format
- - Configurable styles
- - Unit testing
-
+- Configurable log message format
+- Configurable styles
+- Unit testing
 
 ##Thanks
 
 We would like to thank the authors of some libraries this code was inspired by:
 
- - Esa-Matti Suuronen - clim (http://github.com/epeli/node-clim)
- - TJ Holowaychuk - callsite (http://github.com/visionmedia/callsite)
+- Esa-Matti Suuronen - clim (http://github.com/epeli/node-clim)
+- TJ Holowaychuk - callsite (http://github.com/visionmedia/callsite)
 
 ##License
 The MIT License (MIT)
